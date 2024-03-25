@@ -5,7 +5,6 @@ const config = require('../config/config.json'); // Importez votre configuration
 
 // Créez une instance Sequelize avec la configuration appropriée
 const sequelize = new Sequelize(config.development);
-
 const Product = sequelize.define('Product', {
     id: {
         type: DataTypes.INTEGER,

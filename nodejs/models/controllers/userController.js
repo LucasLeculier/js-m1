@@ -30,6 +30,7 @@ exports.loginUser = async (req, res) => {
         }
 
         // Vérification du mot de passe
+        console.log(password, user.password)
         const isPasswordValid = await bcrypt.compare(password, user.password);
         if (!isPasswordValid) {
             return res.status(401).json({ message: 'Mot de passe incorrect' });
