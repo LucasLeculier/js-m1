@@ -1,0 +1,51 @@
+<header class='navbar-header'>
+  <nav class="h-16 w-full flex items-center justify-around">
+    <div class="nav-profile">
+
+      <button (click)="handleClickLog($event)">
+        <span *ngIf="isAuthenticated">Bonjour {{ username }}!</span>
+        <span *ngIf="!isAuthenticated">Bonjour! Connexion ici!</span>
+      </button>
+
+      <!-- Popover pour la connexion -->
+      <div *ngIf="anchorElLog" class="popover">
+        <button (click)="logout()">Déconnexion</button>
+        <a type="button" routerLink="/login">Se connecter</a>
+        <a type="button" routerLink="/register">S'inscrire</a>
+
+      </div>
+
+    </div>
+
+    <!-- Formulaire de recherche -->
+    <form (submit)="onSubmit()" class=''>
+      <input type="text" placeholder="Rechercher..."  />
+      <button type="submit">
+        <i class="mdi mdi-magnify" aria-hidden="true"></i>
+      </button>
+    </form>
+
+    <!-- Bouton Panier -->
+    <div class="nav-panier">
+      <button (click)="handleClickPanier($event)">
+        <i class="mdi mdi-cart" aria-hidden="true"></i>
+      </button>
+
+      <!-- Popover pour le panier -->
+      <div *ngIf="anchorElPanier" class="popover">
+        <div *ngIf="!panier">
+          <p>Ajoutez des produits à votre panier!</p>
+        </div>
+        <div *ngIf="panier">
+          <div *ngFor="let product of panier">
+            <p>{{ product.quantity }}x {{ product.Product.nom }}</p>
+            <button (click)="deleteProduct(product)">
+              <i class="mdi mdi-delete" aria-hidden="true"></i>
+            </button>
+          </div>
+          <p>Coût total: {{ totalCost }}€</p>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

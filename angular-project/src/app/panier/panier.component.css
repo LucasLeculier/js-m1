@@ -1,0 +1,12 @@
+.delete-button {
+    height: 24px;
+    width: 24px;
+}
+
+.panier-container {
+    padding: 25px;
+    margin: 25px;
+    width: 50%;
+    border-radius: 20px;
+    box-shadow: inset 0px 0px 5px 5px #0000003b;
+}

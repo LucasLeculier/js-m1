@@ -1,0 +1,25 @@
+<div class='background'>
+    <form (ngSubmit)="registerUser()" class='base-container'>
+            <h2>Inscription</h2>
+
+            <mat-form-field class="example-full-width">
+                <mat-label>Pseudo</mat-label>
+                <input matInput type="text" id="username" name="username" [(ngModel)]="username" required>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Mot de passe</mat-label>
+                <input matInput type="password" id="password" name="password" [(ngModel)]="password" required>
+              </mat-form-field>
+              <mat-form-field class="example-full-width">
+                <mat-label>Confirmer mot de passe</mat-label>
+                <input matInput type="password" id="confPassword" name="confPassword" [(ngModel)]="confPassword" required>
+              </mat-form-field>
+            <button mat-flat-button type="submit">
+                Valider
+            </button>
+            <button mat-flat-button routerLink="/login">
+                Se connecter
+            </button>
+    </form>
+
+</div>

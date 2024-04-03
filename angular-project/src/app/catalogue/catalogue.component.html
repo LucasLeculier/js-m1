@@ -1,0 +1,14 @@
+<div class="products-container">
+    <mat-card *ngFor="let product of products" class="shadow hover:shadow-xl">
+            <mat-card-content>
+                <p>{{ product.id }}</p>
+                <p>{{ product.nom }}</p>
+                <p>{{ product.categorie }}</p>
+                <p>{{ product.prix }} €</p>
+            </mat-card-content>
+        <mat-card-actions>
+            <button mat-button (click)="addToCart(product)" size="small">Ajouter au panier</button>
+        </mat-card-actions>
+    </mat-card>
+</div>
+<div *ngIf="!products">Loading...</div>
