@@ -3,10 +3,11 @@ import { mdiCart, mdiDelete, mdiMagnify } from '@mdi/js';
 import React from 'react';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Button, ButtonGroup, Card, CardContent, CardHeader, Popover, Typography } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import { Button, ButtonGroup, Card, CardContent, CardHeader, IconButton, InputAdornment, OutlinedInput, Popover, TextField, Typography } from '@mui/material';
 import axios from 'axios';
 
-export default function Navbar({ onSearch, username_prop }) {
+export default function Navbar({ productList, username_prop, setSearchQuery }) {
 
     const navigate = useNavigate();
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -16,10 +17,12 @@ export default function Navbar({ onSearch, username_prop }) {
     const [username, setUsername] = useState(username_prop);
     const [panier, setPanier] = useState(null);
     const [totalCost, setTotalCost] = useState(0)
+    const [searchQueryInput, setSearchQueryInput] = useState('');
 
 
     const logout = () => {
         setUsername(null);
+        setPanier(null);
         setIsAuthenticated(false)
         localStorage.removeItem('token');
         navigate(`/`);
@@ -27,11 +30,6 @@ export default function Navbar({ onSearch, username_prop }) {
 
     const handleChange = (e) => {
         setSearchTerm(e.target.value);
-    };
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        onSearch(searchTerm);
     };
 
     const toRegister = () => {
@@ -78,7 +76,6 @@ export default function Navbar({ onSearch, username_prop }) {
     const id_log = open_log ? 'simple-popover log' : undefined;
 
     const handleClickPanier = (event) => {
-        console.log(panier[0].Product)
         setAnchorElPanier(anchorElPanier ? null : event.currentTarget);
     };
 
@@ -109,7 +106,7 @@ export default function Navbar({ onSearch, username_prop }) {
             }
 
         };
-        
+
 
         fetchPanier();
     }, []);
@@ -117,14 +114,25 @@ export default function Navbar({ onSearch, username_prop }) {
     useEffect(() => {
         const getTotalPrice = () => {
             let totalPrice = 0;
-            panier.forEach(product => { 
-                totalPrice += product.Product.prix * product.quantity;
-            });
+            if (panier != null) {
+                panier.forEach(product => {
+                    totalPrice += product.Product.prix * product.quantity;
+                });
+            }
+
             setTotalCost(totalPrice.toFixed(2));
         };
-    
+
         getTotalPrice();
     }, [panier])
+
+
+    const handleSearchInputChange = (event) => {
+        const newSearchQuery = event.target.value;
+        setSearchQueryInput(newSearchQuery);
+        setSearchQuery(newSearchQuery); // Met à jour l'état de la recherche dans le composant parent
+    };
+
 
     return (
         <>
@@ -155,18 +163,27 @@ export default function Navbar({ onSearch, username_prop }) {
 
 
                     </div>
-                    <form onSubmit={handleSubmit} className=''>
-                        <input
-                            type="text"
+                    <form className=''>
+                        <TextField
+                            value={searchQueryInput}
+                            onChange={handleSearchInputChange}
                             placeholder="Rechercher..."
-                            value={searchTerm}
-                            onChange={handleChange}
+                            InputProps={{
+                                style: { color: '#ffffff' }, // Couleur du texte
+                                endAdornment: (
+                                    <InputAdornment position="start">
+                                        <IconButton style={{ color: '#ffffff' }} onClick={handleSearchInputChange}>
+                                            <SearchIcon />
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                                sx: {
+                                    '& .MuiOutlinedInput-notchedOutline': { borderColor: '#ffffff' }, // Couleur de l'outline
+                                    '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: '#ffffff' }, // Couleur de l'outline au survol
+                                    '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: '#ffffff' }, // Couleur de l'outline en focus
+                                },
+                            }}
                         />
-                        <button type="submit">
-
-                            <Icon path={mdiMagnify} size={1} />
-                        </button>
-
                     </form>
                     <div className="nav-panier">
                         <button onClick={handleClickPanier}>

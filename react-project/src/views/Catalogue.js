@@ -16,21 +16,28 @@ function Catalogue() {
     const username = params.get('username');
     console.log(username);
     const [products, setProducts] = useState([]);
-    const [panier, setPanier] = useState([])
+    console.log(products)
+    const [panier, setPanier] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
 
-    const addToCart = async ({product}) => {
+    const filteredProductList = products.filter(product =>
+        product.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        product.categorie.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+
+    const addToCart = async ({ product }) => {
         try {
             const userId = localStorage.getItem('userId');
             if (!userId) {
-              console.error('ID utilisateur non trouvé dans le stockage local');
-              return;
+                console.error('ID utilisateur non trouvé dans le stockage local');
+                return;
             }
-        
+
             await axios.post('http://localhost:3000/api/Addpanier', { user_id: userId, product_id: product.id });
             alert('Produit ajouté au panier avec succès');
-          } catch (error) {
+        } catch (error) {
             console.error('Erreur lors de l\'ajout du produit au panier:', error);
-          }
+        }
         setPanier([...panier, product])
         console.log(panier)
     }
@@ -57,14 +64,17 @@ function Catalogue() {
     return (
         <>
             {username == null ?
-                <Navbar />
+                <Navbar
+                    productList={products}
+                    setSearchQuery={setSearchQuery} />
                 :
                 <Navbar
-                    username_prop={username}/>}
+                    productList={products}
+                    username_prop={username} />}
 
             {products ?
                 <div className="products-container">
-                    {products.map((product, index) => (
+                    {filteredProductList.map((product, index) => (
                         <Card className="shadow hover:shadow-xl" variant="outlined" key={index}>
                             <CardActionArea>
                                 <CardContent href=''>
@@ -74,10 +84,12 @@ function Catalogue() {
                                     <Typography>{product.prix} €</Typography>
                                 </CardContent>
                             </CardActionArea>
-                            <CardActions>
-                                <Button onClick={() => addToCart({ product })} size="small">Ajouter au panier<Icon path={mdiCartArrowDown} size={1} /></Button>
-                            </CardActions>
-                            
+                            {username == null ? '' :
+                                <CardActions>
+                                    <Button onClick={() => addToCart({ product })} size="small">Ajouter au panier<Icon path={mdiCartArrowDown} size={1} /></Button>
+                                </CardActions>
+                            }
+
                         </Card>
                     ))}
                 </div>
