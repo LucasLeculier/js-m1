@@ -3,7 +3,11 @@ import { CommonModule } from '@angular/common';
 import { IconModule, IconSetService } from '@coreui/icons-angular';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
 import { AppComponent } from './app.component';
+import { SearchBarComponent } from './searchbar/searchbar.component';
+import { SearchBarModule } from './searchbar/searchbar.module';
 
 
 
@@ -14,7 +18,10 @@ import { AppComponent } from './app.component';
     CommonModule,
     IconModule,
     MatMenuModule, 
-    MatButtonModule 
+    MatButtonModule,
+    MatFormFieldModule,
+    MatIconModule,
+    SearchBarModule
   ],
   providers: [IconSetService]
 })

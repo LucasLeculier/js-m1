@@ -6,12 +6,14 @@ import { cilCart } from '@coreui/icons';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import { IconModule, IconSetService } from '@coreui/icons-angular';
+import { SearchBarComponent } from './searchbar/searchbar.component';
+import { SearchBarModule } from './searchbar/searchbar.module';
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  imports: [CommonModule, RouterLink, RouterOutlet, MatMenuModule, MatButtonModule],
+  imports: [CommonModule, RouterLink, RouterOutlet, MatMenuModule, MatButtonModule, SearchBarModule],
   styleUrls: ['./app.component.css'],
   standalone: true
 })
@@ -50,6 +52,12 @@ export class AppComponent implements OnInit {
     this.anchorElLog = null;
   }
 
+  onSearchQueryChange(event: Event): void {
+    // Ajoutez ici le code pour traiter l'événement, par exemple :
+    const searchQuery = (event.target as HTMLInputElement).value;
+    console.log('Nouvelle recherche : ', searchQuery);
+  }
+
   handleClickPanier(event: any): void {
     this.anchorElPanier = this.anchorElPanier ? null : event.currentTarget;
   }
@@ -62,9 +70,4 @@ export class AppComponent implements OnInit {
     this.username = username;
   }
 
-
-
-  onSubmit(): void {
-    // Logique de recherche ici
-  }
 }

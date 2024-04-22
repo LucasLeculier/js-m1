@@ -7,6 +7,10 @@
   text-align: center;
 }
 
+.app-search-bar{
+  height: 56px;
+}
+
 .App-logo {
   height: 40vmin;
   pointer-events: none;

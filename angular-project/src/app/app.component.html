@@ -22,12 +22,7 @@
     </div>
 
     <!-- Formulaire de recherche -->
-    <form (submit)="onSubmit()" class=''>
-      <input type="text" placeholder="Rechercher..." />
-      <button type="submit">
-        <i class="mdi mdi-magnify" aria-hidden="true"></i>
-      </button>
-    </form>
+    <app-search-bar class="app-search-bar" (searchQueryChange)="onSearchQueryChange($event)"></app-search-bar>
 
     <!-- Bouton Panier -->
     <div class="nav-panier">
