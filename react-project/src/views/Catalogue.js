@@ -7,6 +7,7 @@ import { Card, CardActionArea, Typography, CardContent, Button, CardActions } fr
 import { useLocation } from "react-router-dom";
 import Icon from '@mdi/react';
 import { mdiCartArrowDown } from '@mdi/js';
+import Categoriebar from "../component/CategorieBar.js";
 
 
 function Catalogue() {
@@ -19,11 +20,31 @@ function Catalogue() {
     console.log(products)
     const [panier, setPanier] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
+    const [categorieBarOpen, setCategorieBarOpen] = useState(false);
+    const [categorieFilters, setCategorieFilters] = useState([]);
+    const [priceFilters, setPriceFilters] = useState([]);
 
-    const filteredProductList = products.filter(product =>
-        product.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        product.categorie.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const handleToggleCategorieBar = () => {
+        setCategorieBarOpen(!categorieBarOpen);
+    };
+
+    const filteredProductList = products.filter(product => {
+        const matchNameOrCategory = product.nom.toLowerCase().includes(searchQuery.toLowerCase()) ||
+            product.categorie.toLowerCase().includes(searchQuery.toLowerCase());
+        const matchCategory = categorieFilters.length === 0 || categorieFilters.includes(product.categorie);
+        const matchPrice = priceFilters.length === 0 || priceFilters.some(filter => {
+            if (filter === 'Prix bas') {
+                return product.prix < 20;
+            } else if (filter === 'Prix moyen') {
+                return product.prix >= 20 && product.prix < 100;
+            } else if (filter === 'Prix élevé') {
+                return product.prix >= 100;
+            }
+            return false;
+        });
+
+        return matchNameOrCategory && matchCategory && matchPrice;
+    });
 
     const addToCart = async ({ product }) => {
         try {
@@ -71,14 +92,19 @@ function Catalogue() {
                 <Navbar
                     productList={products}
                     username_prop={username} />}
-
+            <Categoriebar
+                open={categorieBarOpen}
+                onClose={handleToggleCategorieBar}
+                onCategorieFilterChange={setCategorieFilters}
+                onPriceFilterChange={setPriceFilters}
+            />
+            <Button size="large" variant="contained" style={{ margin: "10px" }} onClick={handleToggleCategorieBar}>Barre des filtres</Button>
             {products ?
                 <div className="products-container">
                     {filteredProductList.map((product, index) => (
-                        <Card className="shadow hover:shadow-xl" variant="outlined" key={index}>
+                        <Card className="shadow hover:shadow-xl mx-1 my-1 min-h-40 min-w-48" variant="outlined" key={index}>
                             <CardActionArea>
                                 <CardContent href=''>
-                                    <Typography>{product.id}</Typography>
                                     <Typography>{product.nom}</Typography>
                                     <Typography>{product.categorie}</Typography>
                                     <Typography>{product.prix} €</Typography>
